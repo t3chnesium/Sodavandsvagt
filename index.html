@@ -378,7 +378,6 @@
             <button class="btn" style="padding:.5rem .75rem;font-size:.82rem" onclick="changePassword()">Skift kode</button>
           </div>
           <button class="btn btn-outline" style="padding:.5rem .85rem;font-size:.82rem" onclick="logout()">Log ud</button>
-          <span onclick="resetSetup()" style="color:var(--muted);font-size:.78rem;cursor:pointer;text-decoration:underline">Nulstil opsætning</span>
         </div>
       </div>
     </div>
@@ -394,8 +393,10 @@
 <div class="toast" id="toast"></div>
 
 <script>
-// ── Supabase config (gemt i localStorage) ──────────────────────────────────
-let cfg = JSON.parse(localStorage.getItem('sv_supabase') || 'null');
+// ── Supabase config (hardkodet) ────────────────────────────────────────────
+const SUPABASE_URL = 'https://tctpowekivabttsutkmc.supabase.co';
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRjdHBvd2VraXZhYnR0c3V0a21jIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI1NTg3MjksImV4cCI6MjA4ODEzNDcyOX0.5Olx1W2tkRzT_cjQvtuf3qohBbHs8JMWNvjUQIWkYAY';
+let cfg = { url: SUPABASE_URL, key: SUPABASE_KEY };
 let isAdmin = false;
 let swapIndex = null;
 let undoStack = [];
@@ -477,19 +478,10 @@ window.saveSetup = async function() {
   }
 };
 
-window.resetSetup = function() {
-  localStorage.removeItem('sv_supabase');
-  location.reload();
-};
+// ── Setup fjernet — credentials er hardkodet ──────────────────────────────
 
 // ── Boot ───────────────────────────────────────────────────────────────────
 async function boot(skipSeed) {
-  if (!cfg) {
-    hide('loadingOverlay');
-    show('setupScreen');
-    return;
-  }
-
   show('loadingOverlay');
   document.getElementById('loadingText').textContent = 'Henter data...';
 
